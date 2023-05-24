@@ -1,22 +1,30 @@
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const fs = require('fs');
-const xml2js = require('xml2js');
-
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+const port = 3000;
 
-const PORT = process.env.PORT || 3000;
+// Body parser middleware to handle post requests
+app.use(express.urlencoded({ extended: true }));
 
+// Set the view engine to ejs
+app.set('view engine', 'ejs');
+
+// Serve static files from the "public" directory
 app.use(express.static('public'));
 
-// socket connection
-io.on('connection', (socket) => {
-    console.log('Client connected');
-
-    // Here you will handle the xml file reading and emitting
+// Define routes
+app.get('/', (req, res) => {
+    res.render('index');
 });
 
-server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.get('/user', (req, res) => {
+    res.render('user');
+});
+
+app.get('/admin', (req, res) => {
+    res.render('admin');
+});
+
+// Listen to the appropriate port
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+});
